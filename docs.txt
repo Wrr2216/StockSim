@@ -1,0 +1,19 @@
+This code is a Python script that uses various libraries such as yfinance, pandas, numpy, scikit-learn, etc. to perform stock price prediction using a Support Vector Machine (SVM) model.
+
+First, two functions are defined: calculate_RSI() and calculate_MACD(). calculate_RSI() calculates the Relative Strength Index (RSI) of the given stock prices. It takes two arguments: the first is the stock price data as a Pandas DataFrame, and the second is the number of periods for which RSI is to be calculated. calculate_MACD() calculates the Moving Average Convergence Divergence (MACD) of the given stock prices. It takes one argument: the stock price data as a Pandas DataFrame. Both these functions return the calculated values as Pandas Series.
+
+After that, the script downloads historical stock price data for the symbol 'AAPL' using the yf.download() function from the yfinance library. It takes three arguments: the symbol of the stock, the start date, and the end date. The downloaded data is stored in a Pandas DataFrame called df.
+
+Then, some pre-processing is done on the data by calculating Simple Moving Averages (SMA), RSI, and MACD using the two functions defined earlier. The SMA is calculated for two different periods (20 and 50), while RSI is calculated for a period of 14. The MACD is calculated using the EMA (Exponential Moving Average) for two different periods (12 and 26), and the signal line is calculated using the EMA for a period of 9. The histogram is then calculated as the difference between the MACD and signal line. Finally, any NaN values are dropped from the DataFrame.
+
+After that, feature engineering is performed by creating a feature matrix X and a target variable y. The feature matrix X contains the SMA_20, SMA_50, RSI, MACD, Signal, and Histogram columns from the pre-processed data, while the target variable y is created based on the Adj Close column. The target variable y contains binary values (0 or 1) indicating whether the stock price will increase or decrease on the next day.
+
+The data is then split into training and testing sets using the train_test_split() function from the scikit-learn library. It takes four arguments: the feature matrix, target variable, the test size, and the random state.
+
+A ColumnTransformer object is created to pre-process the data. It takes a tuple with three arguments: the first is a string indicating the name of the transformer, the second is an instance of the transformer (in this case, the StandardScaler() function is used to standardize the data), and the third is a list of columns to transform.
+
+A Pipeline object is then created to chain the preprocessor and SVM classifier together. The SVM classifier is created using the SVC() function from the scikit-learn library with a linear kernel. The fit() method of the SVM classifier is then called on the training data.
+
+The model is then evaluated by predicting the target variable y for the testing data using the predict() method of the SVM classifier. The accuracy score is calculated using the accuracy_score() function from the scikit-learn library. The classification report and confusion matrix are printed using the classification_report() and confusion_matrix() functions from the same library.
+
+Finally, the model is used to predict the next day's stock price by taking the last row of the feature matrix X, scaling it using the preprocessor, and passing it to the SVM classifier's predict() method. The predicted action (buy or sell)
